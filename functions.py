@@ -4,7 +4,6 @@ from osuapi import OsuApi, ReqConnector
 import requests
 import os
 import sys
-import datetime
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -23,7 +22,7 @@ def display_profile(param):
     user_url = "https://osu.ppy.sh/users/"+str(profile[0].user_id)
 
     # Embed Creation.
-    embed = discord.Embed(title=Usertitle, timestamp=datetime.datetime.utcnow(),
+    embed = discord.Embed(title=Usertitle, timestamp=datetime.utcnow(),
                           url=user_url,
                           color=0xFF0418,
                           footer="Osu India bot v.1.0"
@@ -57,7 +56,7 @@ def Top_Scores(context, user, amt):
     Usertitle = "Top {} Scores for {}".format(amt, user)
     count = 1
 	#Embed
-    embed = discord.Embed(title=Usertitle, timestamp=datetime.datetime.utcnow(),
+    embed = discord.Embed(title=Usertitle, timestamp=datetime.utcnow(),
                           color=0xFF0418,
                           footer="Osu India bot v.1.0"
                           )
@@ -77,7 +76,7 @@ def recent_Scores(param, amt):
     Usertitle = "Recent {} scores for {}".format(amt, param)
     count = 1
     # Discord Embed Creation.
-    embed = discord.Embed(title=Usertitle, timestamp=datetime.datetime.utcnow(),
+    embed = discord.Embed(title=Usertitle, timestamp=datetime.utcnow(),
                           color=0xFF0418,
                           footer="Osu India bot v.1.0"
                           )
