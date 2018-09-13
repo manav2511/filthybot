@@ -1,6 +1,5 @@
 import os
 import sys
-
 import discord
 from discord.ext import commands
 
@@ -9,7 +8,7 @@ from functions import *
 
 from osuapi import OsuApi, ReqConnector
 
-Token_read = open("token.txt")
+Token_read = open("Token.txt")
 api_read = open("osuapikey.txt")
 
 
@@ -21,7 +20,8 @@ import json
 
 api = OsuApi(apicode, connector=ReqConnector())
 
-client = commands.Bot(command_prefix = 'f!')
+client = commands.Bot(command_prefix='f!')
+
 
 def restart_program():
     """Restarts the current program.
@@ -53,40 +53,44 @@ async def restart():
     await client.close()
 
 
-@client.command(pass_context=True)
-async def osu(context, param='xD'):
-    if param != 'xD':
-        em = display(param)
-    else:
+@client.command(pass_context=True) #Completed with Rich embed. Todo: Add Local Search -- Arulson will take care of that.
+async def osu(context, *param):
+    if len(param) == 0:
+        #await client.say("**Provide a Username(s)**")
         with open('records.json') as f:
             data = json.load(f)
         id = data[context.message.author.id]["user_id"]
-        print(id)
-        em = display(id)
-    await client.send_message(context.message.channel, embed=em)
-
+        embed = display_profile(id)
+        await client.send_message(context.message.channel, embed=embed)
+    elif len(param) == 1:
+        embed = display_profile(param)
+        await client.send_message(context.message.channel, embed=embed)
+    else:
+        for var in param:
+            embed = display_profile(var)
+            await client.send_message(context.message.channel, embed=embed)
 
 @client.command(pass_context=True)
 async def top(context, user, amt=5):
-    scores = api.get_user_best(user,limit=amt)
-    em = scoredisp(user, scores, amt)
-    await client.send_message(context.message.channel, embed=em)
+    embed = Top_Scores(context, user, amt)
+    await client.send_message(context.message.channel, embed=embed)
 
-@client.command(pass_context=True)
+
+@client.command(pass_context=True) #Completed With Rich Embed.
 async def recent(context, param, amt=5):
-    scores = api.get_user_recent(param,limit=amt)
-    em = recentdisp(param, scores, amt)
-    await client.send_message(context.message.channel, embed=em)
+    embed = recent_Scores(param, amt)
+    await client.send_message(context.message.channel, embed=embed)
+
 
 @client.command(pass_context=True)
-async def set(ctx,param):
+async def set(ctx, param):
     ''' Sets a username.
     many usernames can be set to one discord iD and every time this command is
     called, number of days of filthy farmer gets reset
     '''
     try:
-        user_id=api.get_user(param)[0].user_id
-        discord_id=ctx.message.author.id   # Discord id
+        user_id = api.get_user(param)[0].user_id
+        discord_id = ctx.message.author.id   # Discord iD
         new_data = {
             'user_id': user_id,
             'days': 0,   # Days of filthy farmer left
@@ -99,7 +103,7 @@ async def set(ctx,param):
         with open('records.json', 'w') as f:
             json.dump(data, f, indent=2)
         tit = 'succesfully set {} IGN as {}'.format(ctx.message.author, param)
-        em = discord.Embed(title= tit, colour=0xDEADBF)
+        em = discord.Embed(title=tit, colour=0xDEADBF)
         await client.say(embed=em)
 
     except IndexError:
