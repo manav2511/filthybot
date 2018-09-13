@@ -13,8 +13,8 @@ Token_read = open("token.txt")
 api_read = open("osuapikey.txt")
 
 
-TOKEN = Token_read.readline()
-apicode = api_read.readline()
+TOKEN = Token_read.readline().strip()
+apicode = api_read.readline().strip()
 
 import json
 
