@@ -9,7 +9,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 api_read = open("osuapikey.txt")
-apicode = api_read.readline()
+apicode = api_read.readline().strip()
 api = OsuApi(apicode, connector=ReqConnector())
 
 
