@@ -8,7 +8,7 @@ from functions import *
 
 from osuapi import OsuApi, ReqConnector
 
-Token_read = open("Token.txt")
+Token_read = open("token.txt")
 api_read = open("osuapikey.txt")
 
 
