@@ -65,7 +65,7 @@ def Top_Scores(context, user, amt):
         beatmap = api.get_beatmaps(beatmap_id=var.beatmap_id)
         Title = "{}. {}[{}] +**{}**".format(count, beatmap[0].title,
                                        beatmap[0].version, var.enabled_mods)
-        Value = "PP:{}\n Played on:{}".format(var.pp, var.date)
+        Value = "PP:{}\n Played {}".format(var.pp, time_elapsed(var.date))
         embed.add_field(name=Title, value=Value, inline=False)
         count += 1
     return embed
