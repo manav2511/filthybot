@@ -106,7 +106,9 @@ async def set(ctx,param):
         await client.say('invalid username')
 
 
-    
-
-
+@client.command(pass_context=True)
+async def compare(ctx,user1,user2):
+	em = check(user1,user2)
+	await client.send_message(context.message.channel, embed=em)
+	
 client.run(TOKEN)

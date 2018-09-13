@@ -42,3 +42,22 @@ def recentdisp(user,scores,amt):
 	em = discord.Embed(title= tit, description=desc, colour=0xDEADBF)
 	return em
 
+
+def check(user1,user2):
+	#major formatting required
+	#to add avatar pic no clue how to
+	p1 = api.get_user(user1)
+	p2 = api.get_user(user2)
+	tit = "Comparing stats for " + user1 + " and " + user2	
+	desc = "\t\t"+user1+"  |  "+user2+"\t\t\n"		#\t or multiple spaces not working
+	desc = desc+"**Rank :**\t " + str(p1[0].pp_rank) + "  |  " + str(p2[0].pp_rank)+"\n"
+	desc = desc+"**Country Rank :**\t " + str(p1[0].pp_country_rank) + "  |  " + str(p2[0].pp_country_rank)+"\n"
+	desc = desc+"**PP :**\t " + str(p1[0].pp_raw) + "  |  " + str(p2[0].pp_raw)+"\n"
+	desc = desc+"**Accuracy :**\t " + str(p1[0].accuracy)[:5] + "  |  " + str(p2[0].accuracy)[:5]+"\n"
+	score1 = api.get_user_best(user1,limit=1)
+	score2 = api.get_user_best(user2,limit=1)
+	desc = desc+"**Top Play :**\t " + str(score1[0].pp) + "  |  " + str(score2[0].pp)+"\n"
+	desc = desc+"**Playcount :**\t " + str(p1[0].playcount) + "  |  " + str(p2[0].playcount)+"\n"
+	em = discord.Embed(title= tit, description=desc, colour=0xDEADBF)
+	return em
+
