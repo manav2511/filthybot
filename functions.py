@@ -130,7 +130,7 @@ def time_elapsed(datestr):
     if (years > 0):
         time_elapsed += "{} year{}, ".format(years, "s" if years!=1 else "")
     if (months > 0):
-        time_elapsed += ("{} month{}, ".format(months, "s" if months!=1 else "")
+        time_elapsed += "{} month{}, ".format(months, "s" if months!=1 else "")
     if (days > 0):
         time_elapsed += "{} day{}, ".format(days, "s" if days!=1 else "")
     if (hours > 0):
