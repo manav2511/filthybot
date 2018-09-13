@@ -80,6 +80,15 @@ async def top(context, user, amt=5):
 async def recent(context, param, amt=5):
     embed = recent_Scores(param, amt)
     await client.send_message(context.message.channel, embed=embed)
+	
+	
+@client.command(pass_context=True) #Completed With Rich Embed.
+async def recent(context, amt=5):
+    with open('records.json') as f:
+        data = json.load(f)
+    id = data[context.message.author.id]["user_id"]
+    embed = recent_Scores(id, amt)
+    await client.send_message(context.message.channel, embed=embed)
 
 
 @client.command(pass_context=True)
