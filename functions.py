@@ -87,8 +87,8 @@ def recent_Scores(param, amt):
                                            beatmap[0].version, var.enabled_mods)
 
         Time_del = var.date
-        Value = "*Played on*: {}\n SR: {}".format(
-            Time_del, str(beatmap[0].difficultyrating)[:5])
+        Value = "*Played {}\n SR: {}".format(
+            time_elapsed(Time_del), str(beatmap[0].difficultyrating)[:5])
         embed.add_field(name=Title, value=Value, inline=False)
         count += 1
     return embed
