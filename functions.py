@@ -65,7 +65,7 @@ def Top_Scores(context, user, amt):
         beatmap = api.get_beatmaps(beatmap_id=var.beatmap_id)
         Title = "{}. {}[{}] +**{}**".format(count, beatmap[0].title,
                                        beatmap[0].version, var.enabled_mods)
-        Value = "PP:{}\n Played {}".format(var.pp, time_elapsed(var.date))
+        Value = "PP:{}\n Played {}".format(var.pp, time_elapsed(str(var.date)))
         embed.add_field(name=Title, value=Value, inline=False)
         count += 1
     return embed
@@ -86,7 +86,7 @@ def recent_Scores(param, amt):
         Title = "{}. {}[{}] +**{}**".format(count, beatmap[0].title,
                                            beatmap[0].version, var.enabled_mods)
 
-        Time_del = var.date
+        Time_del = str(var.date)
         Value = "*Played {}\n SR: {}".format(
             time_elapsed(Time_del), str(beatmap[0].difficultyrating)[:5])
         embed.add_field(name=Title, value=Value, inline=False)
