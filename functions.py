@@ -1,11 +1,13 @@
-import discord
-from discord.ext import commands
-from osuapi import OsuApi, ReqConnector
-import requests
+import json
 import os
 import sys
 from datetime import datetime
+
+import discord
+import requests
 from dateutil.relativedelta import relativedelta
+from discord.ext import commands
+from osuapi import OsuApi, ReqConnector
 
 api_read = open("osuapikey.txt")
 apicode = api_read.readline().strip()
@@ -169,3 +171,20 @@ def time_elapsed(datestr):
         time_elapsed += "{} second{} ago".format(seconds, "s" if seconds!=1 else "")
 
     return time_elapsed
+
+def params_seperator(context, *params):
+    #Default user AND default amount
+    if len(params) == 0:
+        with open('records.json') as f:
+            data = json.load(f)
+        user = api.get_user(data[context.message.author.id]["user_id"])[0].username
+        amt=5
+    #Only default amount
+    elif len(params) == 1:
+        user = params[0]
+        amt=5
+    #No defaults
+    else:
+        user = params[0]
+        amt = params[1]
+    return (user,amt)

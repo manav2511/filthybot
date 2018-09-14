@@ -1,21 +1,21 @@
+import json
 import os
 import sys
+
 import discord
-from discord.ext import commands
-
 import requests
-from functions import *
-
+from discord.ext import commands
 from osuapi import OsuApi, ReqConnector
 
-Token_read = open("token.txt")
+from functions import *
+
+Token_read = open("token2.txt")
 api_read = open("osuapikey.txt")
 
 
 TOKEN = Token_read.readline().strip()
 apicode = api_read.readline().strip()
 
-import json
 
 
 api = OsuApi(apicode, connector=ReqConnector())
@@ -72,40 +72,14 @@ async def osu(context, *param):
 
 @client.command(pass_context=True)
 async def top(context, *params):
-    #Default user AND default amount
-    if len(params) == 0:
-        with open('records.json') as f:
-            data = json.load(f)
-        user = api.get_user(data[context.message.author.id]["user_id"])[0].username
-        amt=5
-    #Only default amount
-    elif len(params) == 1:
-        user = params[0]
-        amt=5
-    #No defaults
-    else:
-        user = params[0]
-        amt = params[1]
+    (user, amt) = params_seperator(context, *params)
     embed = Top_Scores(user, amt)
     await client.send_message(context.message.channel, embed=embed)
 
 
 @client.command(pass_context=True) #Completed With Rich Embed.
 async def recent(context, *params):
-    #Default user AND default amount
-    if len(params) == 0:
-        with open('records.json') as f:
-            data = json.load(f)
-        user = api.get_user(data[context.message.author.id]["user_id"])[0].username
-        amt=5
-    #Only default amount
-    elif len(params) == 1:
-        user = params[0]
-        amt=5
-    #No defaults
-    else:
-        user = params[0]
-        amt = params[1]
+    (user, amt) = params_seperator(context, *params)
     embed = recent_Scores(user, amt)
     await client.send_message(context.message.channel, embed=embed)
 
@@ -145,20 +119,7 @@ async def compare(ctx, user1, user2):
 	
 @client.command(pass_context = True)
 async def topr(context, *params):
-    #Default user AND default amount
-    if len(params) == 0:
-        with open('records.json') as f:
-            data = json.load(f)
-        user = api.get_user(data[context.message.author.id]["user_id"])[0].username
-        amt= 5
-    #Only default amount
-    elif len(params) == 1:
-        user = params[0]
-        amt= 5
-    #No defaults
-    else:
-        user = params[0]
-        amt = int(params[1])
+    (user, amt)=params_seperator(context, *params)
     em=recent_top(user, amt)
     await client.send_message(context.message.channel, embed=em)
 
