@@ -71,14 +71,42 @@ async def osu(context, *param):
             await client.send_message(context.message.channel, embed=embed)
 
 @client.command(pass_context=True)
-async def top(context, user, amt=5):
-    embed = Top_Scores(context, user, amt)
+async def top(context, *params):
+    #Default user AND default amount
+    if len(params) == 0:
+        with open('records.json') as f:
+            data = json.load(f)
+        user = api.get_user(data[context.message.author.id]["user_id"])[0].username
+        amt=5
+    #Only default amount
+    elif len(params) == 1:
+        user = params[0]
+        amt=5
+    #No defaults
+    else:
+        user = params[0]
+        amt = params[1]
+    embed = Top_Scores(user, amt)
     await client.send_message(context.message.channel, embed=embed)
 
 
 @client.command(pass_context=True) #Completed With Rich Embed.
-async def recent(context, param, amt=5):
-    embed = recent_Scores(param, amt)
+async def recent(context, *params):
+    #Default user AND default amount
+    if len(params) == 0:
+        with open('records.json') as f:
+            data = json.load(f)
+        user = api.get_user(data[context.message.author.id]["user_id"])[0].username
+        amt=5
+    #Only default amount
+    elif len(params) == 1:
+        user = params[0]
+        amt=5
+    #No defaults
+    else:
+        user = params[0]
+        amt = params[1]
+    embed = recent_Scores(user, amt)
     await client.send_message(context.message.channel, embed=embed)
 
 
@@ -110,9 +138,31 @@ async def set(ctx, param):
         await client.say('invalid username')
 
 
-@client.command(pass_context=True)
-async def compare(ctx,user1,user2):
-	em = check(user1,user2)
-	await client.send_message(context.message.channel, embed=em)
+@client.command(pass_context = True)
+async def compare(ctx, user1, user2):
+	em = check(user1, user2)
+	await client.send_message(ctx.message.channel, embed=em)
 	
+@client.command(pass_context = True)
+async def topr(context, *params):
+    #Default user AND default amount
+    if len(params) == 0:
+        with open('records.json') as f:
+            data = json.load(f)
+        user = api.get_user(data[context.message.author.id]["user_id"])[0].username
+        amt= 5
+    #Only default amount
+    elif len(params) == 1:
+        user = params[0]
+        amt= 5
+    #No defaults
+    else:
+        user = params[0]
+        amt = int(params[1])
+    em=recent_top(user, amt)
+    await client.send_message(context.message.channel, embed=em)
+
+
+
+
 client.run(TOKEN)

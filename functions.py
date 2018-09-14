@@ -49,7 +49,7 @@ def display_profile(param):
     return embed
 
 
-def Top_Scores(context, user, amt):
+def Top_Scores(user, amt):
 	#Api Call
     Scores = api.get_user_best(user, limit=amt)
 	#Local Stuff.
@@ -63,7 +63,7 @@ def Top_Scores(context, user, amt):
 	#Feilds.
     for var in Scores:
         beatmap = api.get_beatmaps(beatmap_id=var.beatmap_id)
-        Title = "{}. {}[{}] +**{}**".format(count, beatmap[0].title,
+        Title = "#{}. {}[{}] +**{}**".format(count, beatmap[0].title,
                                        beatmap[0].version, var.enabled_mods)
         Value = "PP:{}\n Played {}".format(var.pp, time_elapsed(str(var.date)))
         embed.add_field(name=Title, value=Value, inline=False)
@@ -71,9 +71,9 @@ def Top_Scores(context, user, amt):
     return embed
 
 
-def recent_Scores(param, amt):
-    scores = api.get_user_recent(param, limit=amt)
-    Usertitle = "Recent {} scores for {}".format(amt, param)
+def recent_Scores(user, amt):
+    scores = api.get_user_recent(user, limit=amt)
+    Usertitle = "Recent {} scores for {}".format(amt, user)
     count = 1
     # Discord Embed Creation.
     embed = discord.Embed(title=Usertitle, timestamp=datetime.utcnow(),
@@ -83,12 +83,40 @@ def recent_Scores(param, amt):
     # Looping over All Scores and adding feilds.
     for var in scores:
         beatmap = api.get_beatmaps(beatmap_id=var.beatmap_id)
-        Title = "{}. {}[{}] +**{}**".format(count, beatmap[0].title,
+        Title = "#{}. {}[{}] +**{}**".format(count, beatmap[0].title,
                                            beatmap[0].version, var.enabled_mods)
 
         Time_del = str(var.date)
         Value = "*Played {}\n SR: {}".format(
             time_elapsed(Time_del), str(beatmap[0].difficultyrating)[:5])
+        embed.add_field(name=Title, value=Value, inline=False)
+        count += 1
+    return embed
+
+
+#Hacked this together using 3 lists, modifications needed
+def recent_top(user, amt):
+    scores_tuple=[]
+    scores = api.get_user_best(user, limit = 100)
+    for i in range(100):
+        scores_tuple.append((i+1,scores[i]))
+    #sort according to date
+    scores_sorted = sorted(scores_tuple, key=lambda s:s[1].date, reverse = True)
+    Usertitle = "Recent {} top scores for {}".format(amt, user)
+    count = 1
+    #Embed
+    embed = discord.Embed(title=Usertitle, timestamp=datetime.utcnow(),
+                          color=0xFF0418,
+                          footer="Osu India bot v.1.0"
+                          )
+	#Feilds.
+    for var in scores_sorted:
+        if count > amt:
+            break
+        beatmap = api.get_beatmaps(beatmap_id=var[1].beatmap_id)
+        Title = "#{}. {}[{}] +**{}**".format(var[0], beatmap[0].title,
+                                       beatmap[0].version, var[1].enabled_mods)
+        Value = "PP:{}\n Played {}".format(var[1].pp, time_elapsed(str(var[1].date)))
         embed.add_field(name=Title, value=Value, inline=False)
         count += 1
     return embed
