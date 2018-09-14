@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import sqlite3
 from datetime import datetime
 
 import discord
@@ -13,6 +14,8 @@ api_read = open("osuapikey.txt")
 apicode = api_read.readline().strip()
 api = OsuApi(apicode, connector=ReqConnector())
 
+conn = sqlite3.connect('osu.db')
+c = conn.cursor()
 
 def display_profile(param):
         # Obtaining Profile from Paramerter.
@@ -175,9 +178,12 @@ def time_elapsed(datestr):
 def params_seperator(context, *params):
     #Default user AND default amount
     if len(params) == 0:
-        with open('records.json') as f:
-            data = json.load(f)
-        user = api.get_user(data[context.message.author.id]["user_id"])[0].username
+        c.execute("SELECT * FROM USERS WHERE DISCORD_ID = ?",(context.message.author.id,))
+        data=c.fetchone()
+        if data is None:
+            return(None, None)
+        user_id = data[1]
+        user = api.get_user(user_id)[0].username
         amt=5
     #Only default amount
     elif len(params) == 1:
@@ -187,4 +193,4 @@ def params_seperator(context, *params):
     else:
         user = params[0]
         amt = params[1]
-    return (user,amt)
+    return(user,amt)
