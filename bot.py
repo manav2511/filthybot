@@ -144,6 +144,4 @@ async def topr(context, *params):
     await client.send_message(context.message.channel, embed=em)
 
 
-
-
 client.run(TOKEN)
