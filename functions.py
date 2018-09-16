@@ -187,10 +187,33 @@ def params_seperator(context, *params):
         amt=5
     #Only default amount
     elif len(params) == 1:
-        user = params[0]
+        user = tag_to_id(context)
+        if user is False:
+            return(None, None)
+        if user is None:
+            user = params[0]
         amt=5
     #No defaults
     else:
-        user = params[0]
+        user = tag_to_id(context)
+        if user is False:
+            return(None, None)
+        if user is None:
+            user = params[0]
         amt = params[1]
     return(user,amt)
+
+def tag_to_id(context):
+    user_list = context.message.mentions
+    if len(user_list) == 0:
+        return None
+    else:
+        user_id=user_list[0].id
+        c.execute("SELECT * FROM USERS WHERE DISCORD_ID = ?",(user_id,))
+        data=c.fetchone()
+        if data is None:
+            return False
+        return api.get_user(data[1])[0].username
+
+
+
