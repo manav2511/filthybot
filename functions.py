@@ -216,4 +216,32 @@ def tag_to_id(context):
         return api.get_user(data[1])[0].username
 
 
+def new_recent(user_id):
+    scores = api.get_user_best(user_id, limit = 50)
+    new_scores = []
+    last_checked = datetime.now() #need to save the last checked to a file   
+    scores_sorted = sorted(scores, key=lambda s:s.date, reverse = True) #sort according to date
+    for score in scores_sorted:
+        if score.date>last_checked: 
+            new_scores.append(score)
+        else:
+            break
+    print("New Recent was executed")
+    return new_scores
+
+def track():
+    c.execute("SELECT OSU_ID FROM USERS")
+    data=c.fetchall()
+    scores_to_be_printed=[]
+    for x in data:
+        new_scores = new_recent(x[0])
+        if len(new_scores) == 0:
+            continue
+        else:
+            scores_to_be_printed.append(new_scores)
+    print("track was executed")
+    return scores_to_be_printed
+
+    
+
 
