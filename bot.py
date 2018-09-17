@@ -117,5 +117,17 @@ async def topr(context, *params):
     em=recent_top(user, amt)
     await client.send_message(context.message.channel, embed=em)
 
+@client.command(pass_context = True)
+async def start_track(context):
+    counter = 0
+    while not client.is_closed:
+        counter+=1
+        await client.say("Before Track: "+str(counter))
+        scores = track()
+        #Xavier you need to print all the scores in the list along with the IGN of the player who made the score
+        await client.send_message(context.message.channel,"After track: "+str(counter))
+        await asyncio.sleep(120)
+
+
 
 client.run(TOKEN)
