@@ -20,6 +20,8 @@ with open("osuapikey.txt") as api_read:
 
 #Initialize SQLite3
 conn = sqlite3.connect('osu.db')
+conn.text_factory = lambda x: unicode(x, 'utf-8', 'ignore')
+conn.execute("PRAGMA journal_mode=WAL")
 c = conn.cursor()
 c.execute("""CREATE TABLE IF NOT EXISTS USERS(DISCORD_ID INTEGER PRIMARY KEY,
     OSU_ID INTEGER,
