@@ -6,3 +6,4 @@ token2.txt
 .gitignore
 records.json
 Location.py
+osu.db
